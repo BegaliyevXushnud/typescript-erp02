@@ -1,39 +1,75 @@
 import { auth } from "@service";
-import { useEffect, useState } from "react";
 import { LockOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Input, notification, Select } from "antd";
 import erplogo from "../../assets/erplogo.jpg";
+import { useNavigate } from 'react-router-dom';
+import { Sign_In } from "@types";
 
 const Login = () => {
+  const navigate = useNavigate();
   const { Option } = Select;
   const [form] = Form.useForm();
-  const [clientReady, setClientReady] = useState<boolean>(false);
 
-  const handleSubmit = async (values: any) => {
-    const phoneNumber = `${values.prefix}${values.phone}`;
+  
+  const initialValues = {
+    phone_number: "",
+    password: "",
+  };
+
+  const handleSubmit = async (values: Sign_In) => {
     try {
-      await auth.sign_in({ phone_number: phoneNumber, password: values.password });
+      const response = await auth.sign_in(values);
+
+      if (response.status === 200 || response.status === 201) {
+        const access_token = response?.data?.data?.tokens?.access_token;
+        console.log("Access_token", access_token);
+        localStorage.setItem("access_token", access_token);
+
+        notification.success({
+          message: 'Login Successfully',
+          description: 'You have successfully logged in.',
+        });
+
+        navigate("/admin-layout");
+      } else {
+        notification.error({
+          message: 'Login Failed',
+          description: 'An error occurred during login.',
+        });
+      }
     } catch (error) {
       console.error("Login failed:", error);
+      notification.error({
+        message: 'Login Error',
+        description: 'There was an error processing your login request.',
+      });
     }
   };
 
-  useEffect(() => {
-    setClientReady(true);
-  }, []);
-
+  
   const onFinish = (values: any) => {
-    console.log("Finish:", values);
-    handleSubmit(values);
-  };
+    const combinedPhoneNumber = `${values.prefix}${values.phone_number}`;
 
+    const updatedValues = {
+      phone_number: combinedPhoneNumber, // Combined phone number
+      password: values.password, // Keep password unchanged
+    };
+  
+    console.log("Final Payload:", updatedValues);
+    handleSubmit(updatedValues); // Send updated values without 'prefix'
+  };
+  
+  // Phone number prefix selector
   const prefixSelector = (
     <Form.Item name="prefix" noStyle initialValue="+998">
       <Select style={{ width: 100 }}>
         <Option value="+998">+998</Option>
+        <Option value="+999">+7</Option>
+        <Option value="+996">+1</Option>
       </Select>
     </Form.Item>
   );
+
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -47,15 +83,15 @@ const Login = () => {
             <Form
               form={form}
               name="horizontal_login"
+              initialValues={initialValues}
               onFinish={onFinish}
               className="flex flex-col gap-3"
             >
-              {/* Phone number field */}
               <Form.Item
-                name="phone"
+                name="phone_number"
                 rules={[
                   { required: true, message: "Please input your phone number!" },
-                  { pattern: /^[0-9]{9}$/, message: "Please input a valid phone number!" }
+                  
                 ]}
               >
                 <Input
@@ -65,7 +101,6 @@ const Login = () => {
                 />
               </Form.Item>
 
-              {/* Password field */}
               <Form.Item
                 name="password"
                 rules={[
@@ -79,23 +114,19 @@ const Login = () => {
                   className="w-full h-[55px]"
                 />
               </Form.Item>
+
               <Form.Item shouldUpdate>
                 {() => (
                   <Button
                     type="primary"
                     htmlType="submit"
                     className="w-40"
-                    // disabled={
-                    //   !clientReady ||
-                    //   !form.isFieldsTouched(true) ||
-                    //   form.getFieldsError().some(({ errors }) => errors.length)
-                    // }
-                    
                   >
                     Log in
                   </Button>
                 )}
               </Form.Item>
+             <button onClick={() => navigate('sign-up')}>Register now</button>
             </Form>
           </div>
         </div>
