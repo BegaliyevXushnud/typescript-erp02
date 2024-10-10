@@ -51,15 +51,15 @@ const Login = () => {
     const combinedPhoneNumber = `${values.prefix}${values.phone_number}`;
 
     const updatedValues = {
-      phone_number: combinedPhoneNumber, // Combined phone number
-      password: values.password, // Keep password unchanged
+      phone_number: combinedPhoneNumber, 
+      password: values.password, 
     };
   
     console.log("Final Payload:", updatedValues);
-    handleSubmit(updatedValues); // Send updated values without 'prefix'
+    handleSubmit(updatedValues); 
   };
   
-  // Phone number prefix selector
+ 
   const prefixSelector = (
     <Form.Item name="prefix" noStyle initialValue="+998">
       <Select style={{ width: 100 }}>

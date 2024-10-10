@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Button, message, Input } from 'antd';
 import category from '../../service/category';
@@ -6,17 +7,14 @@ import { EditOutlined, DeleteOutlined, UnorderedListOutlined } from '@ant-design
 import CategoryModal from '../../component/modals/categorymodal';
 import GlobalPopconfirm from '../../component/popconfirm';
 import TableComponent from '../../component/table';
-
+import { ParamsType } from '@types';
+import { TablePaginationConfig } from 'antd';
+import './index.css'
 interface CategoryType {
     id: number;
     name: string;
 }
 
-interface ParamsType {
-    search: string;
-    page: number;
-    limit: number;
-}
 
 const Category: React.FC = () => {
     const [data, setData] = useState<CategoryType[]>([]);
@@ -36,7 +34,7 @@ const Category: React.FC = () => {
         const urlParams = new URLSearchParams(search);
         const page = Number(urlParams.get('page')) || 1;
         const limit = Number(urlParams.get('limit')) || 5;
-        const searchParam = urlParams.get("search") || "";
+        const searchParam = urlParams.get('search') || '';
         setParams((prev) => ({
             ...prev,
             page: page,
@@ -52,6 +50,7 @@ const Category: React.FC = () => {
             setTotal(res?.data?.data?.count || 0);
         } catch (err) {
             console.error(err);
+            message.error("Ma'lumotlarni yuklashda xatolik yuz berdi");
         }
     };
 
@@ -80,17 +79,19 @@ const Category: React.FC = () => {
     };
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const searchValue = event.target.value;
         setParams((prev) => ({
             ...prev,
-            search: event.target.value,
+            search: searchValue,
         }));
         const searchParams = new URLSearchParams(search);
-        searchParams.set("search", event.target.value);
+        searchParams.set("search", searchValue);
         navigate(`?${searchParams}`);
     };
 
-    const handlePageChange = (pagination: { current: number, pageSize: number }) => {
-        const { current, pageSize } = pagination;
+    const handlePageChange = (pagination: TablePaginationConfig) => {
+        const current = pagination.current || 1;
+        const pageSize = pagination.pageSize || 5;
         setParams((prev) => ({
             ...prev,
             page: current,
@@ -101,6 +102,9 @@ const Category: React.FC = () => {
         currentParams.set('limit', `${pageSize}`);
         navigate(`?${currentParams}`);
     };
+    
+
+
 
     const handleCancel = () => {
         setOpen(false);

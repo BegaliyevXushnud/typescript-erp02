@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -47,11 +47,16 @@ const Admin = () => {
           mode="inline"
           defaultSelectedKeys={['1']}
           onClick={({ key }) => {
-            // Menyu elementi bosilganda yo'naltirish
-            if (key === '2') navigate('/admin-layout/category');
+           
             if (key === '1') navigate('/admin-layout/product');
-            // Boshqa yo'llarni shu yerda qo'shing
-          }}
+            if (key === '2') navigate('/admin-layout/category');
+            if (key === '3') navigate('/admin-layout/brands');
+            if (key === '4') navigate('/admin-layout/brands-category');
+            if (key === '5') navigate('/admin-layout/ads');
+            if (key === '6') navigate('/admin-layout/stock');
+            if (key === '7') navigate('/admin-layout/settings');
+        }}
+        
           items={[
             {
               key: '1',

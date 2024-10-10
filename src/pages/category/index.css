@@ -1,0 +1,46 @@
+.header-container {
+    display: flex;
+    justify-content: space-between; /* Elementlar o'rtasida bo'sh joy */
+    align-items: center; /* Vertikal markazlash */
+}
+
+.header-container .search-input {
+    width: 300px; /* Desktopda kengligi 300px */
+}
+
+/* Kichik ekranlarda kengligini avtomatik o'zgarishiga imkon beradi */
+@media (max-width: 768px) {
+    .header-container .search-input {
+        width: 100%; /* Mobil qurilmalarda kengligi 100% bo'ladi */
+    }
+}
+.table-container {
+    overflow-x: auto; /* Kichik ekranlarda jadval uchun gorizontal aylanish */
+    margin-bottom: 16px; /* Jadval va boshqa elementlar o'rtasida bo'sh joy */
+}
+
+.table-container table {
+    width: 100%; /* Jadval kengligi to'liq */
+    min-width: 600px; /* Minimal kenglikni belgilash, agar kerak bo'lsa */
+}
+
+@media (max-width: 768px) {
+    .table-container table {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        min-width: 300px; /* Kichik ekranlarda jadvalning minimal kengligi */
+    }
+}

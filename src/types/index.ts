@@ -26,5 +26,6 @@ export interface ParamsType {
   export interface AuthRequest {
     sign_in: (data: Sign_In) => Promise<any>;
     sign_up: (data: Sign_Up) => Promise<any>;
+    ParamsType: (data: ParamsType) => Promise<any>;
   }
   

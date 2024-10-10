@@ -1,23 +1,21 @@
+import { Table } from 'antd';
+import {  TablePaginationConfig } from 'antd/es/table';
+import { AnyObject } from 'antd/es/_util/type';
 
-import { Table, TablePaginationConfig } from 'antd';
-import { ColumnsType } from 'antd/es/table';
+type TablePropsType = {
+  columns: any[];
+  data: AnyObject[] | undefined;
+  pagination: false | TablePaginationConfig | undefined;
+  handleChange: (pagination: TablePaginationConfig) => void;
+};
 
-interface TableComponentProps<T> {
-    columns: ColumnsType<T>;
-    data: T[];
-    pagination: TablePaginationConfig;
-    handleChange: (pagination: TablePaginationConfig) => void;
-}
-
-const Index = <T extends object>({ columns, data, pagination, handleChange }: TableComponentProps<T>) => (
-    <Table
-        columns={columns}
-        dataSource={data}
-        pagination={pagination}
-        onChange={(pagination) => handleChange(pagination)}
-        bordered
-        rowKey={(record) => (record as any).id || (record as any).key} // rowKey to'g'ri ishlashini ta'minlash uchun
-    />
+const Index = ({ columns, data, handleChange, pagination }: TablePropsType) => (
+  <Table
+    columns={columns}
+    dataSource={data}
+    pagination={pagination}
+    onChange={(pagination) => handleChange(pagination)}
+  />
 );
 
 export default Index;
