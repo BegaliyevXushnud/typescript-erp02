@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Button, message, Input } from 'antd';
 import category from '../../service/category';
@@ -10,11 +9,11 @@ import TableComponent from '../../component/table';
 import { ParamsType } from '@types';
 import { TablePaginationConfig } from 'antd';
 import './index.css'
+
 interface CategoryType {
     id: number;
     name: string;
 }
-
 
 const Category: React.FC = () => {
     const [data, setData] = useState<CategoryType[]>([]);
@@ -102,9 +101,6 @@ const Category: React.FC = () => {
         currentParams.set('limit', `${pageSize}`);
         navigate(`?${currentParams}`);
     };
-    
-
-
 
     const handleCancel = () => {
         setOpen(false);
@@ -115,17 +111,17 @@ const Category: React.FC = () => {
         {
             title: '№',
             dataIndex: 'index',
-            render: (text: string, item: CategoryType, index: number) => (params.page - 1) * params.limit + index + 1,
+            render: (_: any, __: CategoryType, index: number) => (params.page - 1) * params.limit + index + 1,
         },
         {
             title: 'Category name',
             dataIndex: 'name',
-            render: (text: string, item: CategoryType) => <a onClick={() => editItem(item)}>{text}</a>,
+            render: (_: string, item: CategoryType) => <a onClick={() => editItem(item)}>{item.name}</a>,
         },
         {
             title: 'Action',
             dataIndex: 'action',
-            render: (text: string, item: CategoryType) => (
+            render: (_: string, item: CategoryType) => (
                 <div style={{ display: 'flex', gap: '10px' }}>
                     <Button type="link" icon={<UnorderedListOutlined />} onClick={() => navigateToSubCategory(item)} />
                     <Button type="link" icon={<EditOutlined />} onClick={() => editItem(item)} />
