@@ -4,7 +4,7 @@
 const index = () => {
   return (
     <div>
-      Ads
+      Ads sfd
     </div>
   )
 }
