@@ -45,7 +45,7 @@ const Admin = () => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={['1']}
+          defaultSelectedKeys={['2']}
           onClick={({ key }) => {
            
             if (key === '1') navigate('/admin-layout/product');

@@ -28,10 +28,9 @@ const Index: React.FC = () => {
             <Route path="/" element={<App />}>
                  <Route index element={<Suspense fallback={<Loading />}><SignIn /></Suspense>} />
                  <Route path="sign-up" element={<Suspense fallback={<Loading />}><SignUp /></Suspense>} />
-
                <Route path="admin-layout" element={<Suspense fallback={<Loading />}><Admin /></Suspense>}>
+               <Route path="product" element={<Suspense fallback={<Loading />}><Product /></Suspense>} />
     <Route path="category" element={<Suspense fallback={<Loading />}><Category /></Suspense>} />
-    <Route path="product" element={<Suspense fallback={<Loading />}><Product /></Suspense>} />
     <Route path="brands" element={<Suspense fallback={<Loading />}><Brands /></Suspense>} />
     <Route path="brands-category" element={<Suspense fallback={<Loading />}><BrandsCategory /></Suspense>} />
     <Route path="ads" element={<Suspense fallback={<Loading />}><Ads /></Suspense>} />
