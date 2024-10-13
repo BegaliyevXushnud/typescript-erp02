@@ -1,103 +1,157 @@
-import  { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { MenuFoldOutlined, MenuUnfoldOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Button, Layout, Menu, theme, Modal, Space, Select, Tooltip } from 'antd';
+import { NavLink, useLocation, Outlet, useNavigate } from 'react-router-dom';
+import LogoImg from "../../assets/najot.jpg";
+
 import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
   FileProtectOutlined,
-  AppstoreOutlined,
-  TagOutlined,
   TagsOutlined,
-  NotificationOutlined,
+  SettingOutlined,
   StockOutlined,
-  SettingOutlined
+  NotificationOutlined,
+  TagOutlined,
+  AppstoreOutlined
 } from '@ant-design/icons';
-import { Button, Layout, Menu, theme } from 'antd';
-import Logov from '../../assets/najot.jpg';
-import { Outlet,useNavigate } from 'react-router-dom';
 
-const { Header, Sider, Content } = Layout;
+const { Header, Sider } = Layout;
 
-const Admin = () => {
-  const [collapsed, setCollapsed] = useState(false);
-  const navigate = useNavigate(); // navigate hooki
+interface AdminMenuItem {
+  content: string;
+  path: string;
+  icon: React.ComponentType | string;
+}
+
+const Admin: React.FC = () => {
+  const [collapsed, setCollapsed] = useState<boolean>(false);
+  const [selectedKeys, setSelectedKeys] = useState<string>("");
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  useEffect(() => {
+    const index = admin.findIndex((item) => item.path === pathname);
+    if (index !== -1) {
+      setSelectedKeys(index.toString());
+    }
+  }, [pathname]);
+
+  const ChangeLanguage = (value: string) => {
+    console.log(value);
+  };
+
+  const admin: AdminMenuItem[] = [
+    {
+      content: "Product",
+      path: "/admin-layout",
+      icon: FileProtectOutlined,
+    },
+    {
+      content: "Category",
+      path: "/admin-layout/category",
+      icon: AppstoreOutlined,
+    },
+    {
+      content: "Brands",
+      path: "/admin-layout/brands",
+      icon: TagOutlined,
+    },
+    {
+      content: "Brand-Category",
+      path: "/admin-layout/brands-category",
+      icon: TagsOutlined,
+    },
+    {
+      content: "Ads",
+      path: "/admin-layout/ads",
+      icon: NotificationOutlined,
+    },
+    {
+      content: "Stock",
+      path: "/admin-layout/stock",
+      icon: StockOutlined,
+    },
+    {
+      content: "Setting",
+      path: "/admin-layout/setting",
+      icon: SettingOutlined,
+    },
+  ];
+
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+
+  const handleLogout = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    navigate('/');
+    setIsModalVisible(false);
+    window.localStorage.removeItem('access_token');
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed} className="min-h-[100vh]">
-        <div style={{ height: '48px', margin: '16px', display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'flex-start' }}>
+        <div
+          style={{
+            height: '58px',
+            margin: '16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: collapsed ? 'center' : 'flex-start',
+          }}
+        >
           <img
-            src={Logov}
+            src={LogoImg}
             alt="Logo"
             style={{
-              maxWidth: collapsed ? '62px' : '70px',
-              height: 'auto',
+              maxWidth: '60px',
+              height: '40px',
               borderRadius: '50%',
               objectFit: 'cover',
+              marginRight: collapsed ? 0 : '10px',
             }}
           />
           {!collapsed && (
-            <span style={{ marginLeft: '12px', fontSize: '18px', fontWeight: 'bold', color: 'white' }}>Najot</span>
+            <span style={{ fontSize: '18px', fontWeight: 'bold', color: 'white' }}>Najot</span>
           )}
         </div>
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={['2']}
-          onClick={({ key }) => {
-           
-            if (key === '1') navigate('/admin-layout/product');
-            if (key === '2') navigate('/admin-layout/category');
-            if (key === '3') navigate('/admin-layout/brands');
-            if (key === '4') navigate('/admin-layout/brands-category');
-            if (key === '5') navigate('/admin-layout/ads');
-            if (key === '6') navigate('/admin-layout/stock');
-            if (key === '7') navigate('/admin-layout/settings');
-        }}
-        
-          items={[
-            {
-              key: '1',
-              icon: <FileProtectOutlined />,
-              label: 'Product',
-            },
-            {
-              key: '2',
-              icon: <AppstoreOutlined />,
-              label: 'Category',
-            },
-            {
-              key: '3',
-              icon: <TagOutlined/>,
-              label: 'Brands',
-            },
-            {
-              key: '4',
-              icon: <TagsOutlined/>,
-              label: 'Brands Category',
-            },
-            {
-              key: '5',
-              icon: <NotificationOutlined/>,
-              label: 'ADS',
-            },
-            {
-              key: '6',
-              icon: <StockOutlined/>,
-              label: 'Stock',
-            },
-            {
-              key: '7',
-              icon: <SettingOutlined  />,
-              label: 'Setting',
-            },
-          ]}
+          selectedKeys={[selectedKeys]}
+          items={admin.map((item, index) => ({
+            key: index.toString(),
+            icon: React.createElement(item.icon as React.ComponentType),
+            label: (
+              <NavLink
+                to={item.path}
+                className="text-white hover:text-white focus:text-white"
+              >
+                {item.content}
+              </NavLink>
+            ),
+          }))}
         />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
+        <Header
+          style={{
+            padding: 30,
+            background: colorBgContainer,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
           <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -108,19 +162,55 @@ const Admin = () => {
               height: 64,
             }}
           />
+          <Space wrap>
+            <Select
+              defaultValue="en"
+              style={{ width: 120 }}
+              onChange={(value) => ChangeLanguage(value)}
+              options={[
+                { value: 'en', label: 'en' },
+                { value: 'uz', label: 'uz' },
+              ]}
+            />
+            <Tooltip title="Logout" placement="bottom">
+              <Button
+                type="primary"
+                icon={<LogoutOutlined />}
+                onClick={handleLogout}
+                style={{
+                  borderRadius: borderRadiusLG,
+                  display: 'flex',
+                  alignItems: 'center',
+                  height: '40px',
+                  padding: '0 16px',
+                }}
+              />
+            </Tooltip>
+          </Space>
         </Header>
-        <Content
-          style={{
-            margin: '24px 16px',
-            padding: 24,
-            minHeight: 280,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          <Outlet />
-        </Content>
+        <div className="p-3">
+          <div
+            style={{
+              margin: '24px 16px',
+              padding: 24,
+              minHeight: 280,
+              background: colorBgContainer,
+              borderRadius: borderRadiusLG,
+            }}
+          >
+            <Outlet />
+          </div>
+        </div>
       </Layout>
+
+      <Modal
+        title="Tasdiqlash"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <p>Hisobingizdan chiqmoqchimisiz?</p>
+      </Modal>
     </Layout>
   );
 };

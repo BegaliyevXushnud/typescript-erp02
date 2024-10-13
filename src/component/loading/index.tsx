@@ -48,7 +48,7 @@ const LoadingAnimation: React.FC = () => {
         src="http://a.top4top.net/p_1990j031.gif"
         alt="Loading"
         className="block min-h-[209px] min-w-[200px] "
-        style={{ paddingTop: (loadingHeight - 209) / 2, paddingLeft: (loadingWidth - 200) / 2 }}
+        style={{ paddingTop: (loadingHeight - 409) / 2, paddingLeft: (loadingWidth - 200) / 2 }}
       />
       <div className="mouse original rounded-full bg-[#fff782] absolute transition-all duration-500 ease-in-out"></div>
     </div>

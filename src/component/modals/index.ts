@@ -1,3 +1,5 @@
 
 import CategoryModal from "./categorymodal";
-export {CategoryModal}
+import BrandModal from './brandmodal'
+import  BrandCategoryModal  from "./brandcategory";
+export {CategoryModal,BrandModal,BrandCategoryModal}
