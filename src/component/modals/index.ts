@@ -2,4 +2,5 @@
 import CategoryModal from "./categorymodal";
 import BrandModal from './brandmodal'
 import  BrandCategoryModal  from "./brandcategory";
-export {CategoryModal,BrandModal,BrandCategoryModal}
+import AdsDrawer from "./adsmodal";
+export {CategoryModal,BrandModal,BrandCategoryModal,AdsDrawer}
